@@ -24,7 +24,7 @@ rmse(mod, ex$train)
 \seealso{
 Other resampling techniques: 
 \code{\link{bootstrap}()},
-\code{\link{resample_bootstrap}()},
-\code{\link{resample}()}
+\code{\link{resample}()},
+\code{\link{resample_bootstrap}()}
 }
 \concept{resampling techniques}

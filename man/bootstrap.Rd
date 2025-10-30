@@ -31,8 +31,8 @@ hist(subset(tidied, term == "(Intercept)")$estimate)
 }
 \seealso{
 Other resampling techniques: 
+\code{\link{resample}()},
 \code{\link{resample_bootstrap}()},
-\code{\link{resample_partition}()},
-\code{\link{resample}()}
+\code{\link{resample_partition}()}
 }
 \concept{resampling techniques}

@@ -20,7 +20,7 @@ coef(lm(mpg ~ wt, data = resample_bootstrap(mtcars)))
 \seealso{
 Other resampling techniques: 
 \code{\link{bootstrap}()},
-\code{\link{resample_partition}()},
-\code{\link{resample}()}
+\code{\link{resample}()},
+\code{\link{resample_partition}()}
 }
 \concept{resampling techniques}

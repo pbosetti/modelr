@@ -7,7 +7,9 @@
 #'   `predict()` documentation for given `model` to determine valid values.
 #' @param ... `gather_predictions` and `spread_predictions` take
 #'   multiple models. The name will be taken from either the argument
-#'   name of the name of the model.
+#'   name of the name of the model. `add_predictions` passes further arguments
+#'   to the underlying `predict` generic method; this allows, for example, to
+#'   also get confidence or prediction bands (when available).
 #' @param .pred,.model The variable names used by `gather_predictions`.
 #' @return A data frame. `add_prediction` adds a single new column,
 #'   with default name `pred`, to the input `data`.
@@ -26,11 +28,19 @@
 #' grid <- data.frame(x = seq(0, 1, length = 10))
 #' grid %>% add_predictions(m1)
 #'
+#' # To also get confidence bands:
+#' grid %>% add_predictions(m1, interval="confidence", level=0.99)
+#'
 #' m2 <- lm(y ~ poly(x, 2), data = df)
 #' grid %>% spread_predictions(m1, m2)
 #' grid %>% gather_predictions(m1, m2)
-add_predictions <- function(data, model, var = "pred", type = NULL) {
-  data[[var]] <- predict2(model, data, type = type)
+add_predictions <- function(data, model, var = "pred", type = NULL, ...) {
+  pred <- predict2(model, data, type = type, ...)
+  if ("matrix" %in% class(pred)) {
+    data <- cbind(data, pred)
+  } else {
+    data[[var]] <- predict2(model, data, type = type, ...)
+  }
   data
 }
 
@@ -56,10 +66,10 @@ gather_predictions <- function(data, ..., .pred = "pred", .model = "model", type
   vctrs::vec_rbind(!!!df, .names_to = .model)
 }
 
-predict2 <- function(model, data, type = NULL) {
+predict2 <- function(model, data, type = NULL, ...) {
   if (is.null(type)) {
-    stats::predict(model, data)
+    stats::predict(model, data, ...)
   } else {
-    stats::predict(model, data, type = type)
+    stats::predict(model, data, type = type, ...)
   }
 }

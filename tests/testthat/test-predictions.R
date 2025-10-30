@@ -27,4 +27,11 @@ test_that("*_predictions() return expected shapes", {
   expect_equal(nrow(out), nrow(df) * 2)
 })
 
+test_that("add_predictions() provide intervals", {
+  df <- tibble::tibble(x = 1:5, y = c(1, 4, 3, 2, 5))
+  mod <- lm(y ~ x, data = df)
+  pred <- stats::predict(mod, df, interval="conf")
 
+  out <- add_predictions(df, mod, interval = "confidence")
+  expect_equal(out$lwr, as.numeric(pred[,"lwr"]))
+})

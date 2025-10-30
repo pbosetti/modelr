@@ -6,7 +6,7 @@
 \alias{gather_predictions}
 \title{Add predictions to a data frame}
 \usage{
-add_predictions(data, model, var = "pred", type = NULL)
+add_predictions(data, model, var = "pred", type = NULL, ...)
 
 spread_predictions(data, ..., type = NULL)
 
@@ -24,7 +24,9 @@ gather_predictions(data, ..., .pred = "pred", .model = "model", type = NULL)
 
 \item{...}{\code{gather_predictions} and \code{spread_predictions} take
 multiple models. The name will be taken from either the argument
-name of the name of the model.}
+name of the name of the model. \code{add_predictions} passes further arguments
+to the underlying \code{predict} generic method; this allows, for example, to
+also get confidence or prediction bands (when available).}
 
 \item{.pred, .model}{The variable names used by \code{gather_predictions}.}
 }
@@ -48,6 +50,9 @@ plot(df)
 m1 <- lm(y ~ x, data = df)
 grid <- data.frame(x = seq(0, 1, length = 10))
 grid \%>\% add_predictions(m1)
+
+# To also get confidence bands:
+grid \%>\% add_predictions(m1, interval="confidence", level=0.99)
 
 m2 <- lm(y ~ poly(x, 2), data = df)
 grid \%>\% spread_predictions(m1, m2)
